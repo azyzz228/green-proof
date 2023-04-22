@@ -12,6 +12,7 @@ defmodule BackendWeb.Router do
     resources "/supplier_certificates", SupplierCertificateController, except: [:new, :edit]
     resources "/manufacturers", ManufacturerController, except: [:new, :edit]
     resources "/suppliers", SupplierController, except: [:new, :edit]
+    resources "/product_certificates", ProductCertificateController, except: [:new, :edit]
   end
 
   # Enable LiveDashboard in development

@@ -197,4 +197,103 @@ defmodule Backend.Certificates do
   def change_manufacturer_certificate(%ManufacturerCertificate{} = manufacturer_certificate, attrs \\ %{}) do
     ManufacturerCertificate.changeset(manufacturer_certificate, attrs)
   end
+
+  alias Backend.Certificates.ProductCertificate
+
+  @doc """
+  Returns the list of product_certificates.
+
+  ## Examples
+
+      iex> list_product_certificates()
+      [%ProductCertificate{}, ...]
+
+  """
+  def list_product_certificates do
+    Repo.all(ProductCertificate)
+  end
+
+  @doc """
+  Gets a single product_certificate.
+
+  Raises `Ecto.NoResultsError` if the Product certificate does not exist.
+
+  ## Examples
+
+      iex> get_product_certificate!(123)
+      %ProductCertificate{}
+
+      iex> get_product_certificate!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_product_certificate!(id), do: Repo.get!(ProductCertificate, id)
+
+  def get_product_certificate_by_hash!(hash) do
+    Repo.get!(ProductCertificate, hash)
+  end
+  @doc """
+  Creates a product_certificate.
+
+  ## Examples
+
+      iex> create_product_certificate(%{field: value})
+      {:ok, %ProductCertificate{}}
+
+      iex> create_product_certificate(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_product_certificate(attrs \\ %{}) do
+    %ProductCertificate{}
+    |> ProductCertificate.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a product_certificate.
+
+  ## Examples
+
+      iex> update_product_certificate(product_certificate, %{field: new_value})
+      {:ok, %ProductCertificate{}}
+
+      iex> update_product_certificate(product_certificate, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_product_certificate(%ProductCertificate{} = product_certificate, attrs) do
+    product_certificate
+    |> ProductCertificate.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a product_certificate.
+
+  ## Examples
+
+      iex> delete_product_certificate(product_certificate)
+      {:ok, %ProductCertificate{}}
+
+      iex> delete_product_certificate(product_certificate)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_product_certificate(%ProductCertificate{} = product_certificate) do
+    Repo.delete(product_certificate)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking product_certificate changes.
+
+  ## Examples
+
+      iex> change_product_certificate(product_certificate)
+      %Ecto.Changeset{data: %ProductCertificate{}}
+
+  """
+  def change_product_certificate(%ProductCertificate{} = product_certificate, attrs \\ %{}) do
+    ProductCertificate.changeset(product_certificate, attrs)
+  end
 end

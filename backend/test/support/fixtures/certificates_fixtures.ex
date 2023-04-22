@@ -45,4 +45,19 @@ defmodule Backend.CertificatesFixtures do
 
     manufacturer_certificate
   end
+
+  @doc """
+  Generate a product_certificate.
+  """
+  def product_certificate_fixture(attrs \\ %{}) do
+    {:ok, product_certificate} =
+      attrs
+      |> Enum.into(%{
+        created_at: ~D[2023-04-21],
+        hash: "some hash"
+      })
+      |> Backend.Certificates.create_product_certificate()
+
+    product_certificate
+  end
 end

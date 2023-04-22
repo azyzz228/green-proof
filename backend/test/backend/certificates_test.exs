@@ -138,4 +138,60 @@ defmodule Backend.CertificatesTest do
       assert %Ecto.Changeset{} = Certificates.change_manufacturer_certificate(manufacturer_certificate)
     end
   end
+
+  describe "product_certificates" do
+    alias Backend.Certificates.ProductCertificate
+
+    import Backend.CertificatesFixtures
+
+    @invalid_attrs %{created_at: nil, hash: nil}
+
+    test "list_product_certificates/0 returns all product_certificates" do
+      product_certificate = product_certificate_fixture()
+      assert Certificates.list_product_certificates() == [product_certificate]
+    end
+
+    test "get_product_certificate!/1 returns the product_certificate with given id" do
+      product_certificate = product_certificate_fixture()
+      assert Certificates.get_product_certificate!(product_certificate.id) == product_certificate
+    end
+
+    test "create_product_certificate/1 with valid data creates a product_certificate" do
+      valid_attrs = %{created_at: ~D[2023-04-21], hash: "some hash"}
+
+      assert {:ok, %ProductCertificate{} = product_certificate} = Certificates.create_product_certificate(valid_attrs)
+      assert product_certificate.created_at == ~D[2023-04-21]
+      assert product_certificate.hash == "some hash"
+    end
+
+    test "create_product_certificate/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Certificates.create_product_certificate(@invalid_attrs)
+    end
+
+    test "update_product_certificate/2 with valid data updates the product_certificate" do
+      product_certificate = product_certificate_fixture()
+      update_attrs = %{created_at: ~D[2023-04-22], hash: "some updated hash"}
+
+      assert {:ok, %ProductCertificate{} = product_certificate} = Certificates.update_product_certificate(product_certificate, update_attrs)
+      assert product_certificate.created_at == ~D[2023-04-22]
+      assert product_certificate.hash == "some updated hash"
+    end
+
+    test "update_product_certificate/2 with invalid data returns error changeset" do
+      product_certificate = product_certificate_fixture()
+      assert {:error, %Ecto.Changeset{}} = Certificates.update_product_certificate(product_certificate, @invalid_attrs)
+      assert product_certificate == Certificates.get_product_certificate!(product_certificate.id)
+    end
+
+    test "delete_product_certificate/1 deletes the product_certificate" do
+      product_certificate = product_certificate_fixture()
+      assert {:ok, %ProductCertificate{}} = Certificates.delete_product_certificate(product_certificate)
+      assert_raise Ecto.NoResultsError, fn -> Certificates.get_product_certificate!(product_certificate.id) end
+    end
+
+    test "change_product_certificate/1 returns a product_certificate changeset" do
+      product_certificate = product_certificate_fixture()
+      assert %Ecto.Changeset{} = Certificates.change_product_certificate(product_certificate)
+    end
+  end
 end
