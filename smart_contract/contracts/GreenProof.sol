@@ -10,7 +10,7 @@ contract GreenProof {
         bool isRegenerative;  
         bool isFairTrade;   
         uint256 quantity;
-        bytes32 productName;
+        string productName;
         uint128 id; 
     }
 
@@ -45,15 +45,15 @@ contract GreenProof {
 
 
     function addCertificate(
-    address supplier, 
     address manufacturer, 
     bool isLocallyOwned, 
     bool isRegenerative, 
     bool isFairTrade, 
     uint256 quantity, 
-    bytes32 productName,
+    string calldata productName,
     uint128 id
     ) public {
+        address supplier = msg.sender;
         require(isSupplierEligible(supplier), "Only supplier with rights can issue new certificate.");
 
         supplierCertificates[supplier].push(BigCertificate(
@@ -75,7 +75,7 @@ contract GreenProof {
 
         // Find certificate by ID
         BigCertificate[] storage certificates = supplierCertificates[supplier];
-        BigCertificate storage certificate;
+        BigCertificate memory certificate;
         bool certificateFound = false;
         for (uint i = 0; i < certificates.length; i++) {
             if (certificates[i].id == certificateID) {
@@ -99,12 +99,11 @@ contract GreenProof {
         ));
     }
 
-
-    function produceProduct(uint128 _id) external {
+    function produceProductFrom(uint128 _certificateId) external {
         BigCertificate[] storage certificates = manufacturerCertificates[msg.sender];
         require(certificates.length > 0, "Manufacturer does not any certificates that can be used for manufacturing.");
         for (uint i = 0; i < certificates.length; i++) {
-            if (certificates[i].id == _id && certificates[i].quantity > 0) {
+            if (certificates[i].id == _certificateId && certificates[i].quantity > 0) {
             certificates[i].quantity--;
             break;
             }
