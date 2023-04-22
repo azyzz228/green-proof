@@ -7,6 +7,11 @@ defmodule BackendWeb.Router do
 
   scope "/api", BackendWeb do
     pipe_through :api
+
+    resources "/manufacturer_certificates", ManufacturerCertificateController, except: [:new, :edit]
+    resources "/supplier_certificates", SupplierCertificateController, except: [:new, :edit]
+    resources "/manufacturers", ManufacturerController, except: [:new, :edit]
+    resources "/suppliers", SupplierController, except: [:new, :edit]
   end
 
   # Enable LiveDashboard in development
