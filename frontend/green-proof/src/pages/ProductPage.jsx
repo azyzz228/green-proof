@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import qr from "../assets/qr.jpg";
 import { Header } from "../components/Header";
+import QRCode from "react-qr-code";
 
 export const ProductPage = () => {
 	const searchParams = new URLSearchParams(location.search);
 	const hash = searchParams.get("hash");
 	const [productCertificate, setProductCertificate] = useState(null);
 
+	const [qr, setQr] = useState(null);
 	useEffect(() => {
 		const fetchProductCertificate = async () => {
 			try {
@@ -15,6 +16,7 @@ export const ProductPage = () => {
 				);
 				const data = await response.json();
 				setProductCertificate(data);
+				setQr(productCertificate.hash);
 			} catch (error) {
 				console.error(error);
 			}
@@ -27,7 +29,7 @@ export const ProductPage = () => {
 		<>
 			<Header />
 			<div className="flex flex-row justify-evenly items-start container mx-auto">
-				<img src={qr} alt="" />
+				<QRCode value={qr}/>
 
 				<div className="flex flex-col gap-12">
 					<div className="flex flex-row justify-start items-start space-x-20">
