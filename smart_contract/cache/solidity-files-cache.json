@@ -1,10 +1,10 @@
 {
   "_format": "hh-sol-cache-2",
   "files": {
-    "/Users/azyzz/Documents/projects/hedera-hardhat-example-project/contracts/Greeter.sol": {
-      "lastModificationDate": 1681926798831,
-      "contentHash": "a399cc5eaa352d598f3e349414e85361",
-      "sourceName": "contracts/Greeter.sol",
+    "/Users/azyzz/Documents/projects/hackathon/smart_contract/contracts/GreenProof.sol": {
+      "lastModificationDate": 1682145385847,
+      "contentHash": "9e7d37ef6e3ffba59d20fad9217a22ce",
+      "sourceName": "contracts/GreenProof.sol",
       "solcConfig": {
         "version": "0.8.9",
         "settings": {
@@ -30,10 +30,10 @@
       },
       "imports": [],
       "versionPragmas": [
-        "^0.8.9"
+        ">=0.7.0 <0.9.0"
       ],
       "artifacts": [
-        "Greeter"
+        "GreenProof"
       ]
     }
   }

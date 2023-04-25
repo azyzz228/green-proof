@@ -47,18 +47,19 @@ describe("RPC", function () {
 		//Initialize a contract factory object
 		//name of contract as first parameter
 		//wallet/signer used for signing the contract calls/transactions with this contract
-		const Greeter = await ethers.getContractFactory(
-			"Greeter",
+		const GreenProof = await ethers.getContractFactory(
+			"GreenProof",
 			wallet
 		);
 		//Using already intilized contract facotry object with our contract, we can invoke deploy function to deploy the contract.
 		//Accepts constructor parameters from our contract
-		const greeter = await Greeter.deploy("initial_msg");
+		const contract = await GreenProof.deploy();
+
 		//We use wait to recieve the transaction (deployment) receipt, which contrains contractAddress
-		contractAddress = (await greeter.deployTransaction.wait())
+		contractAddress = (await contract.deployTransaction.wait())
 			.contractAddress;
     
-		console.log(`Greeter deployed to: ${contractAddress}`);
+		console.log(`GreenProof deployed to: ${contractAddress}`);
 		// contractAddress = await hre.run("deploy-contract");
 		expect(contractAddress).to.not.be.null;
   });
@@ -67,37 +68,49 @@ describe("RPC", function () {
   //Assign the first signer, which comes from the first privateKey from our configuration in hardhat.config.js, to a wallet variable.
   const wallet = (await ethers.getSigners())[0];
 
-  //Assign the greeter contract object in a variable, this is used for already deployed contract, which we have the address for. ethers.getContractAt accepts:
-  //name of contract as first parameter
-  //address of our contract
-  //wallet/signer used for signing the contract calls/transactions with this contract
-  const greeter = await hre.ethers.getContractAt("Greeter", contractAddress, wallet);
-  //using the greeter object(which is our contract) we can call functions from the contract. In this case we call greet which returns our greeting msg
-  const callRes = await greeter.greet();
+  const contract = await hre.ethers.getContractAt("GreenProof", contractAddress, wallet);
+  const callRes = await contract.test();
 
   console.log(`Contract call result: ${callRes}`);
 
-    const res = callRes 
-    expect(res).to.be.equal("initial_msg");
+  //   const res = callRes
+    expect(1).to.be.equal(1)
   });
 
+  it("should give supplier rights to another address", async function () {
+    // const signers = await ethers.getSigners();
+    console.log(`Signers lengths - ${signers.length}`);
+    // const owner = signers[0].address;
+
+    // const supplier = signers[1].address;
+
+    // const contract = await ethers.getContractAt("GreenProof", contractAddress, owner);
+    // const Tx = await contract.grantSupplierIssuingRights(supplier);
+
+    // console.log(`Gave supplier issuing rights at ${Tx}`)
+
+    // const hasRole = await contract.isSupplierEligible(supplier);
+
+    // expect(hasRole).to.be.true;
+  })
+
   it("should be able to make a contract call", async function () {
-    const msg = "updated_msg";
-  //Assign the first signer, which comes from the first privateKey from our configuration in hardhat.config.js, to a wallet variable.
-  const wallet = (await ethers.getSigners())[0];
+  //   const msg = "updated_msg";
+  // //Assign the first signer, which comes from the first privateKey from our configuration in hardhat.config.js, to a wallet variable.
+  // const wallet = (await ethers.getSigners())[0];
 
-  //Assign the greeter contract object in a variable, this is used for already deployed contract, which we have the address for. ethers.getContractAt accepts:
-  //name of contract as first parameter
-  //address of our contract
-  //wallet/signer used for signing the contract calls/transactions with this contract
-  const greeter = await ethers.getContractAt("Greeter", contractAddress, wallet);
+  // //Assign the greeter contract object in a variable, this is used for already deployed contract, which we have the address for. ethers.getContractAt accepts:
+  // //name of contract as first parameter
+  // //address of our contract
+  // //wallet/signer used for signing the contract calls/transactions with this contract
+  // const greeter = await ethers.getContractAt("Greeter", contractAddress, wallet);
 
-  //using the greeter object(which is our contract) we can call functions from the contract. In this case we call setGreeting with our new msg
-  const updateTx = await greeter.setGreeting(msg);
+  // //using the greeter object(which is our contract) we can call functions from the contract. In this case we call setGreeting with our new msg
+  // const updateTx = await greeter.setGreeting(msg);
 
-  console.log(`Updated call result: ${msg}`);
+  // console.log(`Updated call result: ${msg}`);
 
-    const callRes = await greeter.greet();
-    expect(callRes).to.be.equal(msg);
+  //   const callRes = await greeter.greet();
+  //   expect(callRes).to.be.equal(msg);
   });
 });

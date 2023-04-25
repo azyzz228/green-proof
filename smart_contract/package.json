@@ -10,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@buidlerlabs/hashgraph-venin-js": "^0.8.2-beta.6",
     "@hashgraph/hedera-local": "^2.4.5",
+    "@hashgraph/sdk": "^2.24.1",
     "@nomicfoundation/hardhat-toolbox": "^2.0.1",
     "dotenv": "^16.0.3"
   },

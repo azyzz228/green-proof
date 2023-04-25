@@ -22,8 +22,8 @@ contract GreenProof {
 
     mapping(address => BigCertificate[]) public manufacturerCertificates;
 
-    constructor() {
-        chair = msg.sender;
+    constructor(address _owner) {
+        chair = _owner;
     }
 
     modifier onlyOwner {
@@ -33,6 +33,10 @@ contract GreenProof {
 
     function grantSupplierIssuingRights(address supplier) public onlyOwner {
         supplierEligibility[supplier] = true;
+    }
+
+    function test() external view returns(address) {
+        return msg.sender;
     }
 
     function revokeSupplierIssuingRights(address supplier) public onlyOwner {
@@ -45,6 +49,7 @@ contract GreenProof {
 
 
     function addCertificate(
+    address supplier, 
     address manufacturer, 
     bool isLocallyOwned, 
     bool isRegenerative, 
@@ -52,11 +57,9 @@ contract GreenProof {
     uint256 quantity, 
     string calldata productName,
     uint128 id
-    ) public {
-        address supplier = msg.sender;
-        require(isSupplierEligible(supplier), "Only supplier with rights can issue new certificate.");
+    ) public returns(BigCertificate memory) {
 
-        supplierCertificates[supplier].push(BigCertificate(
+        BigCertificate memory cert = BigCertificate(
             supplier, 
             manufacturer, 
             isLocallyOwned, 
@@ -65,12 +68,15 @@ contract GreenProof {
             quantity, 
             productName,
             id
-        ));
+        );
+
+        supplierCertificates[supplier].push(cert);
+
+        return cert;
     }
 
     // supplier passes certificate to manufacturer
-    function issueCertificateToManufacturer(address manufacturer, uint128 certificateID) external {
-        address supplier = msg.sender;
+    function issueCertificateToManufacturer(address supplier, address manufacturer, uint128 certificateID) external returns(BigCertificate memory) {
         require(isSupplierEligible(supplier), "Supplier is not eligible to issue certificates");
 
         // Find certificate by ID
@@ -86,8 +92,7 @@ contract GreenProof {
         }
         require(certificateFound, "Certificate not found for the supplier");
 
-        // Issue certificate to manufacturer
-        manufacturerCertificates[manufacturer].push(BigCertificate(
+        BigCertificate memory cert = BigCertificate(
             supplier,
             manufacturer,
             certificate.isLocallyOwned,
@@ -96,18 +101,24 @@ contract GreenProof {
             certificate.quantity,
             certificate.productName,
             certificate.id
-        ));
+        );
+        // Issue certificate to manufacturer
+        manufacturerCertificates[manufacturer].push(cert);
+
+        return cert;
     }
 
-    function produceProductFrom(uint128 _certificateId) external {
+    function produceProductFrom(uint128 _certificateId) external returns(bool) {
         BigCertificate[] storage certificates = manufacturerCertificates[msg.sender];
         require(certificates.length > 0, "Manufacturer does not any certificates that can be used for manufacturing.");
         for (uint i = 0; i < certificates.length; i++) {
             if (certificates[i].id == _certificateId && certificates[i].quantity > 0) {
             certificates[i].quantity--;
-            break;
+            return true;
             }
         }
+        return false;
     }
+
 
 }
